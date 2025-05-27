@@ -37,8 +37,8 @@ public class Frame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==button){
+            String text = textField.getText();
             if(loggedIn == false){
-                String text = textField.getText();
                 textField.setText("");
                 loggedIn = true;
                 label.setText("Enter your message");
@@ -48,7 +48,7 @@ public class Frame extends JFrame implements ActionListener {
                     throw new RuntimeException(ex);
                 }
             } else {
-
+                Client.enterMessage(text);
             }
 
 

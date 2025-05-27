@@ -1,10 +1,9 @@
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class Client {
+    public static Client client;
 
     private Socket socket;
     private BufferedReader bufferedReader;
@@ -26,17 +25,15 @@ public class Client {
 
     public void sendMessage(String message) {
         try {
-            bufferedWriter.write(username);
+
+
+
+
+
+            bufferedWriter.write(username + ": " + message);
             bufferedWriter.newLine();
             bufferedWriter.flush();
 
-
-
-            if(message != null){
-                bufferedWriter.write(username + ": " + message);
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
-            }
 
 
         } catch (IOException e) {
@@ -88,12 +85,12 @@ public class Client {
 
     public static void connect(String username) throws IOException {
         Socket socket = new Socket("localhost", 1234);
-        Client client = new Client(socket, username);
+        client = new Client(socket, username);
         client.listenForMessage();
-        client.sendMessage(null);
+        client.sendMessage("");
     }
 
-    public static void enderMessage(String message){
-
+    public static void enterMessage(String message){
+        client.sendMessage(message);
     }
 }
