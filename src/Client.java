@@ -4,11 +4,13 @@ import java.net.Socket;
 
 public class Client {
     public static Client client;
+    public static Frame frame;
 
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String username;
+
 
     public Client(Socket socket, String username) {
         try {
@@ -25,17 +27,13 @@ public class Client {
 
     public void sendMessage(String message) {
         try {
-
-
-
-
-
-            bufferedWriter.write(username + ": " + message);
+            if(message == null){
+                bufferedWriter.write(username);
+            } else {
+                bufferedWriter.write(username + ": " + message);
+            }
             bufferedWriter.newLine();
             bufferedWriter.flush();
-
-
-
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -51,6 +49,7 @@ public class Client {
                     try {
                         msgFromGroupChat = bufferedReader.readLine();
                         System.out.println(msgFromGroupChat);
+                        frame.addMessage(msgFromGroupChat);
                     } catch (IOException e) {
                         closeEverything(socket, bufferedReader, bufferedWriter);
                     }
@@ -77,7 +76,7 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
 
-        SwingUtilities.invokeLater(() -> new Frame());
+        SwingUtilities.invokeLater(() -> frame = new Frame());
 
 
 
@@ -87,10 +86,11 @@ public class Client {
         Socket socket = new Socket("localhost", 1234);
         client = new Client(socket, username);
         client.listenForMessage();
-        client.sendMessage("");
+        client.sendMessage(null);
     }
 
     public static void enterMessage(String message){
         client.sendMessage(message);
+        frame.addMessage(message);
     }
 }

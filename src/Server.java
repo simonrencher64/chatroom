@@ -5,7 +5,6 @@ import java.net.Socket;
 public class Server {
 
     private ServerSocket serverSocket;
-    public static final String STOP_STRING = "##";
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
