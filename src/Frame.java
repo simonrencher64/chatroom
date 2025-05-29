@@ -58,8 +58,6 @@ public class Frame extends JFrame implements ActionListener {
         this.add(enterPanel);
         this.add(textPanel);
 
-
-
         this.setResizable(false);
         this.setVisible(true);
     }

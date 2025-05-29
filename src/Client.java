@@ -12,6 +12,7 @@ public class Client {
     private String username;
 
 
+
     public Client(Socket socket, String username) {
         try {
             this.socket = socket;
