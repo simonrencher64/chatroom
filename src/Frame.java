@@ -37,6 +37,7 @@ public class Frame {
         label.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
         label.getActionMap().put("rightAction", rightAction);
 
+
         frame.add(label);
         frame.setVisible(true);
     }
