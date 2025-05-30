@@ -47,6 +47,7 @@ public class Frame {
         @Override
         public void actionPerformed(ActionEvent e) {
             label.setLocation(label.getX(), label.getY()-10);
+            sendLocation(label.getX(),label.getY());
         }
     }
     public class DownAction extends AbstractAction{
@@ -54,6 +55,7 @@ public class Frame {
         @Override
         public void actionPerformed(ActionEvent e) {
             label.setLocation(label.getX(), label.getY()+10);
+            sendLocation(label.getX(),label.getY());
         }
     }
     public class LeftAction extends AbstractAction{
@@ -61,6 +63,7 @@ public class Frame {
         @Override
         public void actionPerformed(ActionEvent e) {
             label.setLocation(label.getX()-10, label.getY());
+            sendLocation(label.getX(),label.getY());
         }
     }
     public class RightAction extends AbstractAction{
@@ -68,6 +71,7 @@ public class Frame {
         @Override
         public void actionPerformed(ActionEvent e) {
             label.setLocation(label.getX()+10, label.getY());
+            sendLocation(label.getX(),label.getY());
         }
     }
 

@@ -13,6 +13,8 @@ public class Client {
 
     private ArrayList<OtherPlayer> others = new ArrayList<>();
 
+    public int id;
+
     public Client(Socket socket) {
         try {
             this.socket = socket;
@@ -83,9 +85,6 @@ public class Client {
         Socket socket = new Socket("localhost", 1234);
         client = new Client(socket);
         client.listenForMessage();
-        client.sendMessage(null);
-
-
     }
 
 

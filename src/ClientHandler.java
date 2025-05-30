@@ -18,7 +18,6 @@ public class ClientHandler implements Runnable{
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientID = clientHandlers.size();
             clientHandlers.add(this);
-            broadcastMessage("SERVER: " + clientID + " has entered the chat!");
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -51,7 +50,7 @@ public class ClientHandler implements Runnable{
         for (ClientHandler clientHandler : clientHandlers) {
             try {
                 if (clientHandler.clientID != clientID) {
-                    clientHandler.bufferedWriter.write(clientID + " " + messageToSend);
+                    clientHandler.bufferedWriter.write(clientID + "," + messageToSend);
                     clientHandler.bufferedWriter.newLine();
                     clientHandler.bufferedWriter.flush();
                 }
@@ -64,7 +63,7 @@ public class ClientHandler implements Runnable{
     public void removeClientHandler() {
 
         clientHandlers.remove(this);
-        broadcastMessage(clientID + " end");
+        broadcastMessage("end "+clientID);
 
     }
 
