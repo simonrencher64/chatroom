@@ -50,7 +50,7 @@ public class Client {
                     try {
                         msgFromGroupChat = bufferedReader.readLine();
                         System.out.println(msgFromGroupChat);
-                        frame.addMessage(msgFromGroupChat);
+                        //frame.addMessage(msgFromGroupChat);
                     } catch (IOException e) {
                         closeEverything(socket, bufferedReader, bufferedWriter);
                     }
@@ -92,6 +92,6 @@ public class Client {
 
     public static void enterMessage(String message){
         client.sendMessage(message);
-        frame.addMessage(message);
+        //frame.addMessage(message);
     }
 }
