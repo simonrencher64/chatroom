@@ -8,8 +8,8 @@ public class Client {
     public static Frame frame;
 
     private Socket socket;
-    private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
+    private ObjectInputStream inputStream;
+    private ObjectOutputStream outputStream;
 
     private ArrayList<OtherPlayer> others = new ArrayList<>();
 
@@ -18,21 +18,22 @@ public class Client {
     public Client(Socket socket) {
         try {
             this.socket = socket;
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+            this.inputStream = new ObjectInputStream(socket.getInputStream());
 
         } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            closeEverything(socket, inputStream, outputStream);
         }
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(int x, int y) {
         try {
-            bufferedWriter.write(message);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
+            int[] message = new int[2];
+            message[0] = x;
+            message[1] = y;
+            outputStream.writeObject(message);
         } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            closeEverything(socket, inputStream, outputStream);
         }
     }
 
@@ -44,26 +45,31 @@ public class Client {
 
                 while (socket.isConnected()) {
                     try {
-                        message = bufferedReader.readLine();
+                        message = inputStream.readLine();
                         System.out.println(message);
-                        int msgID = Integer.parseInt(message.substring(0,message.indexOf(",")));
-                        int msgX = Integer.parseInt(message.substring(message.indexOf(",")+1,message.indexOf(" ")));
-                        int msgY = Integer.parseInt(message.substring(message.indexOf(" ")+1));
-                        //frame.addMessage(msgFromGroupChat);
-                        if(msgID >= others.size()){
-                            others.add(new OtherPlayer(msgID, msgX, msgY));
+                        if(message.length() == 1){
+                            id = Integer.parseInt(message);
                         } else {
-                            others.get(msgID).updateLocation(msgX,msgY);
+                            int msgID = Integer.parseInt(message.substring(0,message.indexOf(",")));
+                            int msgX = Integer.parseInt(message.substring(message.indexOf(",")+1,message.indexOf(" ")));
+                            int msgY = Integer.parseInt(message.substring(message.indexOf(" ")+1));
+                            //frame.addMessage(msgFromGroupChat);
+                            if(msgID >= others.size()){
+                                others.add(new OtherPlayer(msgID, msgX, msgY));
+                            } else {
+                                others.get(msgID).updateLocation(msgX,msgY);
+                            }
                         }
+
                     } catch (IOException e) {
-                        closeEverything(socket, bufferedReader, bufferedWriter);
+                        closeEverything(socket, inputStream, outputStream);
                     }
                 }
             }
         }).start();
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+    public void closeEverything(Socket socket, ObjectInputStream bufferedReader, ObjectOutputStream bufferedWriter) {
         try {
             if (bufferedReader != null) {
                 bufferedReader.close();
@@ -89,8 +95,8 @@ public class Client {
 
 
 
-    public static void enterMessage(String message){
-        client.sendMessage(message);
+    public static void enterMessage(int x, int y){
+        client.sendMessage(x,y);
         //frame.addMessage(message);
     }
 }

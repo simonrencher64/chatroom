@@ -2,45 +2,49 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
+
 public class ClientHandler implements Runnable{
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
-    private BufferedReader bufferedReader;
-    private BufferedWriter bufferedWriter;
+    private ObjectInputStream inputStream;
+    private ObjectOutputStream outputStream;
     private int clientID;
 
 
     public ClientHandler(Socket socket) {
         try {
             this.socket = socket;
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+            this.inputStream = new ObjectInputStream(socket.getInputStream());
             this.clientID = clientHandlers.size();
             clientHandlers.add(this);
+            outputStream.write(this.clientID);
         } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            closeEverything(socket, inputStream, outputStream);
         }
-
     }
 
     @Override
     public void run() {
-        String messageFromClient;
+        int[] message;
 
         while (socket.isConnected()) {
             try {
-                messageFromClient = bufferedReader.readLine();
-                if(messageFromClient != null){
-                    broadcastMessage(messageFromClient);
+                message = (int[]) inputStream.readObject();
+                if(message != null){
+                    broadcastMessage(message);
                 } else {
                     removeClientHandler();
                     break;
                 }
 
             } catch (IOException e) {
-                closeEverything(socket, bufferedReader, bufferedWriter);
+                closeEverything(socket, inputStream, outputStream);
                 break;
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -50,12 +54,10 @@ public class ClientHandler implements Runnable{
         for (ClientHandler clientHandler : clientHandlers) {
             try {
                 if (clientHandler.clientID != clientID) {
-                    clientHandler.bufferedWriter.write(clientID + "," + messageToSend);
-                    clientHandler.bufferedWriter.newLine();
-                    clientHandler.bufferedWriter.flush();
+                    clientHandler.outputStream.write(clientID + "," + messageToSend);
                 }
             } catch (IOException e) {
-                closeEverything(socket, bufferedReader, bufferedWriter);
+                closeEverything(socket, inputStream, outputStream);
             }
         }
     }
@@ -67,7 +69,7 @@ public class ClientHandler implements Runnable{
 
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+    public void closeEverything(Socket socket, ObjectInputStream bufferedReader, ObjectOutputStream bufferedWriter) {
         removeClientHandler();
         try {
             if (bufferedReader != null) {

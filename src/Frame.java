@@ -76,7 +76,7 @@ public class Frame {
     }
 
     public void sendLocation(int x,int y){
-        Client.enterMessage(x + " " + y);
+        Client.enterMessage(x,y);
     }
 }
 
