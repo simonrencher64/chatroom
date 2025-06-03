@@ -7,10 +7,13 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable{
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+    public static int idCounter = 0;
     private Socket socket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
     private int clientID;
+    private int x;
+    private int y;
 
 
     public ClientHandler(Socket socket) {
@@ -18,9 +21,9 @@ public class ClientHandler implements Runnable{
             this.socket = socket;
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
-            this.clientID = clientHandlers.size();
+            this.clientID = idCounter;
+            idCounter++;
             clientHandlers.add(this);
-            outputStream.write(this.clientID);
         } catch (IOException e) {
             closeEverything(socket, inputStream, outputStream);
         }
@@ -34,7 +37,10 @@ public class ClientHandler implements Runnable{
             try {
                 message = (int[]) inputStream.readObject();
                 if(message != null){
-                    broadcastMessage(message);
+                    x = message[0];
+                    y = message[1];
+                    broadcastPositions();
+
                 } else {
                     removeClientHandler();
                     break;
@@ -49,12 +55,17 @@ public class ClientHandler implements Runnable{
         }
     }
 
-    public void broadcastMessage(String messageToSend) {
-        System.out.println(messageToSend);
+    public void broadcastPositions() {
+        int[][] message = new int[clientHandlers.size()][3];
+        for(int i = 0; i < clientHandlers.size(); i++){
+            message[i][0] = clientHandlers.get(i).clientID;
+            message[i][1] = clientHandlers.get(i).x;
+            message[i][2] = clientHandlers.get(i).y;
+        }
         for (ClientHandler clientHandler : clientHandlers) {
             try {
                 if (clientHandler.clientID != clientID) {
-                    clientHandler.outputStream.write(clientID + "," + messageToSend);
+                    clientHandler.outputStream.writeObject(message);
                 }
             } catch (IOException e) {
                 closeEverything(socket, inputStream, outputStream);
@@ -65,7 +76,6 @@ public class ClientHandler implements Runnable{
     public void removeClientHandler() {
 
         clientHandlers.remove(this);
-        broadcastMessage("end "+clientID);
 
     }
 

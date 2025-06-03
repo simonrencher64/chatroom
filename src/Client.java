@@ -41,28 +41,20 @@ public class Client {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String message;
+                int[][] message;
 
                 while (socket.isConnected()) {
                     try {
-                        message = inputStream.readLine();
-                        System.out.println(message);
-                        if(message.length() == 1){
-                            id = Integer.parseInt(message);
-                        } else {
-                            int msgID = Integer.parseInt(message.substring(0,message.indexOf(",")));
-                            int msgX = Integer.parseInt(message.substring(message.indexOf(",")+1,message.indexOf(" ")));
-                            int msgY = Integer.parseInt(message.substring(message.indexOf(" ")+1));
-                            //frame.addMessage(msgFromGroupChat);
-                            if(msgID >= others.size()){
-                                others.add(new OtherPlayer(msgID, msgX, msgY));
-                            } else {
-                                others.get(msgID).updateLocation(msgX,msgY);
-                            }
+                        message = (int[][]) inputStream.readObject();
+
+                        for (int[] ints : message) {
+                            updatePosition(ints[0], ints[1], ints[2]);
                         }
 
                     } catch (IOException e) {
                         closeEverything(socket, inputStream, outputStream);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
                     }
                 }
             }
@@ -83,6 +75,16 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void updatePosition(int id, int x, int y){
+        for (OtherPlayer other : others) {
+            if (other.id == id) {
+                other.updateLocation(x,y);
+                return;
+            }
+        }
+        others.add(new OtherPlayer(id,x,y,frame));
     }
 
     public static void main(String[] args) throws IOException {
