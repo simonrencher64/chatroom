@@ -64,9 +64,9 @@ public class ClientHandler implements Runnable{
         }
         for (ClientHandler clientHandler : clientHandlers) {
             try {
-                if (clientHandler.clientID != clientID) {
-                    clientHandler.outputStream.writeObject(message);
-                }
+
+                clientHandler.outputStream.writeObject(message);
+
             } catch (IOException e) {
                 closeEverything(socket, inputStream, outputStream);
             }

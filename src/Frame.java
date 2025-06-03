@@ -19,7 +19,7 @@ public class Frame {
         frame.setLayout(null);
 
         label = new JLabel();
-        label.setBackground(Color.red);
+        label.setBackground(Color.blue);
         label.setBounds(100,100,100,100);
         label.setOpaque(true);
 

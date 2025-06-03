@@ -20,7 +20,6 @@ public class Client {
             this.socket = socket;
             this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.inputStream = new ObjectInputStream(socket.getInputStream());
-
         } catch (IOException e) {
             closeEverything(socket, inputStream, outputStream);
         }
