@@ -62,6 +62,7 @@ public class ClientHandler implements Runnable{
             message[i][1] = clientHandlers.get(i).x;
             message[i][2] = clientHandlers.get(i).y;
         }
+
         for (ClientHandler clientHandler : clientHandlers) {
             try {
 

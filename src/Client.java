@@ -47,10 +47,25 @@ public class Client {
                 while (socket.isConnected()) {
                     try {
                         message = (int[][]) inputStream.readObject();
-
-                        for (int[] ints : message) {
-                            updatePosition(ints[0], ints[1], ints[2]);
+                        if(message.length > frame.panel.positions.size()){
+                            for(int i = 0; i < message.length; i++){
+                                if(i < frame.panel.positions.size()){
+                                    frame.panel.positions.set(i, message[i]);
+                                } else {
+                                    frame.panel.positions.add(message[i]);
+                                }
+                            }
+                        } else {
+                            for(int i = 0; i < frame.panel.positions.size(); i++){
+                                if(i < message.length){
+                                    frame.panel.positions.set(i, message[i]);
+                                } else {
+                                    frame.panel.positions.remove(i);
+                                    i--;
+                                }
+                            }
                         }
+
 
                     } catch (IOException e) {
                         closeEverything(socket, inputStream, outputStream);
