@@ -17,12 +17,12 @@ public class OtherPlayer {
         label.setBackground(Color.red);
         label.setBounds(x,y,100,100);
         label.setOpaque(true);
-        frame.createLabel(label);
+        //frame.createLabel(label);
     }
 
     public void updateLocation(int x, int y){
         this.x = x;
         this.y = y;
-        frame.updateLabel(label,x,y);
+        //frame.updateLabel(label,x,y);
     }
 }

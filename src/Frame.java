@@ -2,86 +2,51 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Frame {
+public class Frame extends JFrame implements KeyListener{
 
-    JFrame frame;
-    JLabel label;
-    Action upAction;
-    Action downAction;
-    Action leftAction;
-    Action rightAction;
+
+    Panel panel;
 
     Frame(){
+        panel = new Panel();
 
-        frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(420,420);
-        frame.setLayout(null);
-
-        label = new JLabel();
-        label.setBackground(Color.blue);
-        label.setBounds(100,100,100,100);
-        label.setOpaque(true);
-
-        upAction = new UpAction();
-        downAction = new DownAction();
-        leftAction = new LeftAction();
-        rightAction = new RightAction();
-
-        label.getInputMap().put(KeyStroke.getKeyStroke('w'), "upAction");
-        label.getActionMap().put("upAction", upAction);
-        label.getInputMap().put(KeyStroke.getKeyStroke('s'), "downAction");
-        label.getActionMap().put("downAction", downAction);
-        label.getInputMap().put(KeyStroke.getKeyStroke('a'), "leftAction");
-        label.getActionMap().put("leftAction", leftAction);
-        label.getInputMap().put(KeyStroke.getKeyStroke('d'), "rightAction");
-        label.getActionMap().put("rightAction", rightAction);
-
-
-        frame.add(label);
-        frame.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.add(panel);
+        this.pack();
+        this.addKeyListener(this);
+        this.setVisible(true);
     }
 
-    public void createLabel(JLabel newLabel){
-        frame.add(newLabel);
+    @Override
+    public void keyTyped(KeyEvent e) {
+
     }
 
-    public void updateLabel(JLabel label,int x,int y){
-        label.setLocation(x,y);
-    }
-
-    public class UpAction extends AbstractAction{
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            label.setLocation(label.getX(), label.getY()-10);
-            sendLocation(label.getX(),label.getY());
+    @Override
+    public void keyPressed(KeyEvent e){
+        switch(e.getKeyCode()) {
+            case 65:
+                panel.x-=10;
+                break;
+            case 87:
+                panel.y-=10;
+                break;
+            case 83:
+                panel.y+=10;
+                break;
+            case 68:
+                panel.x+=10;
+                break;
         }
+        sendLocation(panel.x,panel.y);
     }
-    public class DownAction extends AbstractAction{
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            label.setLocation(label.getX(), label.getY()+10);
-            sendLocation(label.getX(),label.getY());
-        }
-    }
-    public class LeftAction extends AbstractAction{
+    @Override
+    public void keyReleased(KeyEvent e) {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            label.setLocation(label.getX()-10, label.getY());
-            sendLocation(label.getX(),label.getY());
-        }
     }
-    public class RightAction extends AbstractAction{
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            label.setLocation(label.getX()+10, label.getY());
-            sendLocation(label.getX(),label.getY());
-        }
-    }
+
 
     public void sendLocation(int x,int y){
         Client.enterMessage(x,y);

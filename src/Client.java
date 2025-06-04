@@ -13,7 +13,9 @@ public class Client {
 
     private ArrayList<OtherPlayer> others = new ArrayList<>();
 
-    public int id;
+
+
+
 
     public Client(Socket socket) {
         try {
@@ -98,6 +100,5 @@ public class Client {
 
     public static void enterMessage(int x, int y){
         client.sendMessage(x,y);
-        //frame.addMessage(message);
     }
 }
