@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class Client {
     public static Client client;
@@ -10,11 +9,6 @@ public class Client {
     private Socket socket;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
-
-    private ArrayList<OtherPlayer> others = new ArrayList<>();
-
-
-
 
 
     public Client(Socket socket) {
@@ -93,15 +87,6 @@ public class Client {
         }
     }
 
-    public void updatePosition(int id, int x, int y){
-        for (OtherPlayer other : others) {
-            if (other.id == id) {
-                other.updateLocation(x,y);
-                return;
-            }
-        }
-        others.add(new OtherPlayer(id,x,y,frame));
-    }
 
     public static void main(String[] args) throws IOException {
 
