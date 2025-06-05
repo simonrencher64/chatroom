@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class Panel extends JPanel implements ActionListener {
+public class GamePanel extends JPanel implements ActionListener {
 
     final int PANEL_WIDTH = 500;
     final int PANEL_HEIGHT = 500;
@@ -14,7 +14,7 @@ public class Panel extends JPanel implements ActionListener {
     ArrayList<int[]> positions;
 
 
-    Panel(){
+    GamePanel(){
         positions = new ArrayList<>();
 
         this.setPreferredSize(new Dimension(PANEL_WIDTH,PANEL_HEIGHT));
@@ -27,7 +27,7 @@ public class Panel extends JPanel implements ActionListener {
         super.paint(g);
         Graphics2D g2D = (Graphics2D) g;
         for (int[] position : positions) {
-            g2D.drawRect(position[1], position[2], 100, 100);
+            g2D.drawRect(position[1], position[2], 10, 10);
         }
 
     }

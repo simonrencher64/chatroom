@@ -91,9 +91,20 @@ public class Client {
     public static void main(String[] args) throws IOException {
 
         SwingUtilities.invokeLater(() -> frame = new Frame());
-        Socket socket = new Socket("localhost", 1234);
+
+    }
+
+    public static boolean attemptConnection(String host, int port){
+        Socket socket = null;
+        try {
+            socket = new Socket(host, port);
+        } catch (IOException e) {
+            return false;
+        }
+
         client = new Client(socket);
         client.listenForMessage();
+        return true;
     }
 
 

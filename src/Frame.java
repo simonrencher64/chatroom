@@ -1,21 +1,34 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class Frame extends JFrame implements KeyListener{
 
 
-    Panel panel;
+    GamePanel panel;
+    MenuPanel menuPanel;
+
+
 
     Frame(){
-        panel = new Panel();
-
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.add(panel);
+
+        menuPanel = new MenuPanel();
+        this.add(menuPanel);
         this.pack();
-        this.addKeyListener(this);
         this.setVisible(true);
+
+    }
+
+    public void connect(){
+        System.out.println("Connect");
+
+        panel = new GamePanel();
+        this.add(panel);
+        this.remove(menuPanel);
+        this.pack();
+
         sendLocation(panel.x,panel.y);
+        this.addKeyListener(this);
     }
 
     @Override
