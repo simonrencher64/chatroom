@@ -11,7 +11,7 @@ public class Frame extends JFrame implements KeyListener{
 
     Frame(){
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        this.addKeyListener(this);
         menuPanel = new MenuPanel();
         this.add(menuPanel);
         this.pack();
@@ -20,15 +20,14 @@ public class Frame extends JFrame implements KeyListener{
     }
 
     public void connect(){
-        System.out.println("Connect");
-
         panel = new GamePanel();
         this.add(panel);
         this.remove(menuPanel);
+        this.requestFocus();
         this.pack();
 
         sendLocation(panel.x,panel.y);
-        this.addKeyListener(this);
+
     }
 
     @Override
