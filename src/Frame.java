@@ -15,6 +15,7 @@ public class Frame extends JFrame implements KeyListener{
         this.pack();
         this.addKeyListener(this);
         this.setVisible(true);
+        sendLocation(panel.x,panel.y);
     }
 
     @Override

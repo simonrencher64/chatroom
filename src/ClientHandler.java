@@ -77,7 +77,7 @@ public class ClientHandler implements Runnable{
     public void removeClientHandler() {
 
         clientHandlers.remove(this);
-
+        broadcastPositions();
     }
 
     public void closeEverything(Socket socket, ObjectInputStream bufferedReader, ObjectOutputStream bufferedWriter) {
