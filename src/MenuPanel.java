@@ -18,22 +18,20 @@ public class MenuPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==createButton){
+        if (e.getSource() == createButton) {
             try {
-                createServer();
+                Main.createServer();
+                createButton.setEnabled(false);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+        } else if(e.getSource() == joinButton){
+            try {
+                Main.joinServer();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
         }
-    }
-
-    public void createServer() throws IOException {
-        String[] strings = new String[0];
-        Server.main(strings);
-
-    }
-
-    public void joinServer(){
-
     }
 }
