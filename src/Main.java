@@ -8,11 +8,5 @@ public class Main {
         SwingUtilities.invokeLater(() -> menuFrame = new MenuFrame());
     }
 
-    public void createServer(){
 
-    }
-
-    public void joinServer(){
-
-    }
 }
