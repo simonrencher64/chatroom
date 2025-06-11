@@ -26,7 +26,11 @@ public class GamePanel extends JPanel implements ActionListener {
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2D = (Graphics2D) g;
+        g2D.setColor(Color.RED);
         for (int[] position : positions) {
+            if(position[0] == Client.it){
+                g2D.fillRect(position[1], position[2], 10, 10);
+            }
             g2D.drawRect(position[1], position[2], 10, 10);
         }
 

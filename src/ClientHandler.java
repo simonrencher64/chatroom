@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable{
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+    public static int it = 0;
     public static int idCounter = 0;
     private Socket socket;
     private ObjectInputStream inputStream;
@@ -56,12 +57,15 @@ public class ClientHandler implements Runnable{
     }
 
     public void broadcastPositions() {
-        int[][] message = new int[clientHandlers.size()][3];
+        int[][] message = new int[clientHandlers.size()+1][3];
+
         for(int i = 0; i < clientHandlers.size(); i++){
             message[i][0] = clientHandlers.get(i).clientID;
             message[i][1] = clientHandlers.get(i).x;
             message[i][2] = clientHandlers.get(i).y;
         }
+
+        message[clientHandlers.size()][0] = it;
 
         for (ClientHandler clientHandler : clientHandlers) {
             try {

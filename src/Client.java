@@ -5,6 +5,7 @@ import java.net.Socket;
 public class Client {
     public static Client client;
     public static Frame frame;
+    public static int it = 0;
 
     private Socket socket;
     private ObjectInputStream inputStream;
@@ -41,8 +42,11 @@ public class Client {
                 while (socket.isConnected()) {
                     try {
                         message = (int[][]) inputStream.readObject();
-                        if(message.length > frame.panel.positions.size()){
-                            for(int i = 0; i < message.length; i++){
+                        int messageLength = message.length-1;
+                        it = message[messageLength][0];
+
+                        if(messageLength > frame.panel.positions.size()){
+                            for(int i = 0; i < messageLength; i++){
                                 if(i < frame.panel.positions.size()){
                                     frame.panel.positions.set(i, message[i]);
                                 } else {
@@ -51,7 +55,7 @@ public class Client {
                             }
                         } else {
                             for(int i = 0; i < frame.panel.positions.size(); i++){
-                                if(i < message.length){
+                                if(i < messageLength){
                                     frame.panel.positions.set(i, message[i]);
                                 } else {
                                     frame.panel.positions.remove(i);
