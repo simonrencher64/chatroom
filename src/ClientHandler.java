@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable{
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
-    public static int it = 0;
+    public static int itID = 0;
     public static int idCounter = 0;
     private Socket socket;
     private ObjectInputStream inputStream;
@@ -57,6 +57,17 @@ public class ClientHandler implements Runnable{
     }
 
     public void broadcastPositions() {
+
+        if(itID == clientID){
+            for (ClientHandler client : clientHandlers) {
+                if (client.clientID != clientID) {
+                    if (client.x >= x - 10 && client.x <= x + 10 && client.y >= y - 10 && client.y <= y + 10) {
+                        itID = client.clientID;
+                    }
+                }
+            }
+        }
+
         int[][] message = new int[clientHandlers.size()+1][3];
 
         for(int i = 0; i < clientHandlers.size(); i++){
@@ -65,7 +76,7 @@ public class ClientHandler implements Runnable{
             message[i][2] = clientHandlers.get(i).y;
         }
 
-        message[clientHandlers.size()][0] = it;
+        message[clientHandlers.size()][0] = itID;
 
         for (ClientHandler clientHandler : clientHandlers) {
             try {
@@ -79,8 +90,12 @@ public class ClientHandler implements Runnable{
     }
 
     public void removeClientHandler() {
-
-        clientHandlers.remove(this);
+        if(itID == clientID){
+            clientHandlers.remove(this);
+            itID = clientHandlers.getFirst().clientID;
+        } else {
+            clientHandlers.remove(this);
+        }
         broadcastPositions();
     }
 

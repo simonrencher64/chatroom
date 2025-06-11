@@ -39,16 +39,24 @@ public class Frame extends JFrame implements KeyListener{
     public void keyPressed(KeyEvent e){
         switch(e.getKeyCode()) {
             case 65:
-                panel.x-=10;
+                if(panel.x > 0){
+                    panel.x-=10;
+                }
                 break;
             case 87:
-                panel.y-=10;
+                if(panel.y > 0){
+                    panel.y-=10;
+                }
                 break;
             case 83:
-                panel.y+=10;
+                if(panel.y < 490){
+                    panel.y+=10;
+                }
                 break;
             case 68:
-                panel.x+=10;
+                if(panel.x < 490){
+                    panel.x+=10;
+                }
                 break;
         }
         sendLocation(panel.x,panel.y);
