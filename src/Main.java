@@ -10,11 +10,12 @@ public class Main {
         SwingUtilities.invokeLater(() -> menuFrame = new MenuFrame());
     }
 
-    public static void createServer() throws IOException {
+    public static void createServer(String port) throws IOException {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                String[] strings = new String[0];
+                String[] strings = new String[1];
+                strings[0] = port;
                 try {
                     Server.main(strings);
                 } catch (IOException e) {

@@ -6,13 +6,17 @@ import java.io.IOException;
 public class MenuPanel extends JPanel implements ActionListener {
     JButton createButton;
     JButton joinButton;
+    JTextField portField;
 
     public MenuPanel(){
         createButton = new JButton("Create Server");
         createButton.addActionListener(this);
+        portField = new JTextField();
+        portField.setText("1234");
         joinButton = new JButton("Join Server");
         joinButton.addActionListener(this);
         this.add(createButton);
+        this.add(portField);
         this.add(joinButton);
     }
 
@@ -20,7 +24,8 @@ public class MenuPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == createButton) {
             try {
-                Main.createServer();
+                String port = portField.getText();
+                Main.createServer(port);
                 createButton.setEnabled(false);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
